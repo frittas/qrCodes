@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html ng-app="qrCodes">
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js"></script>
+	<link href="css/style.css" rel="stylesheet" />
+</head>
+	<body>
+
+	<div style="text-align:center; width:95%;margin:auto;" ng-controller="MainCtrl">
+		<h1>QR codes  - Rafael Freitas</h1>
+		<h2>Exemplo: mariliaerafael.com.br/confirm?key={numero do convite}</h2>
+
+		<div style="text-align:center; width:100px; heigth:110px; float:left; position:relative; margin: 12px;"
+			ng-repeat="shortUrl in urls">
+			
+			<img src="http://chart.apis.google.com/chart?cht=qr&chs=100x100&choe=UTF-8&chld=H%7C0&chl={{shortUrl}}" alt="QR Code"><br>
+			<span>{{($index + 1)}}</span><br>
+			<!-- <span>{{shortUrl}}</span> -->
+		</div>
+		
+	</div>
+
+		
+		<script type="text/javascript">
+			var myApp = angular.module('qrCodes', []);
+
+			myApp.controller('MainCtrl', ['$scope', '$http', function ($scope, $http) {
+
+				$scope.urls = []; 
+
+				var short = function (index) {
+			    	var longUrl = "http://mariliaerafael.com.br/confirm?key=" + index;
+
+			    	var req = {
+					 	method: 'POST',
+						url: 'https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyCBkLE2LU5nFY3XbAHuAZIHwT8mxJSiIqw',
+						headers: {
+						   'Content-Type':  'application/json'
+						},
+						data: {"longUrl": longUrl}
+					}
+			    	return $http(req);
+			    };
+			  	
+				for (var i = 1; i <= 250; i++) {
+					short(i).then(function (shortUrl) {
+						$scope.urls.push(shortUrl.data.id);
+					});
+				};
+			}]);
+		</script>
+
+	</body>
+</html>
