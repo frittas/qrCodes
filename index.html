@@ -39,13 +39,11 @@
 						},
 						data: {"longUrl": longUrl}
 					}
-			    	return $http(req);
+			    	return longUrl;
 			    };
 			  	
 				for (var i = 1; i <= 250; i++) {
-					short(i).then(function (shortUrl) {
-						$scope.urls.push(shortUrl.data.id);
-					});
+					$scope.urls.push(short(i));
 				};
 			}]);
 		</script>
